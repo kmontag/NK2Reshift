@@ -1,0 +1,18 @@
+###
+# Dependencies for development tasks. These won't be available at
+# runtime in Live.
+
+# Decompilation tool for generating system MIDI Remote Scripts.
+decompyle3~=3.9.0
+
+# Type checker.
+pyright~=1.1.345
+
+# Formatter and linter.
+ruff~=0.1.9
+
+###
+# Packages that should be available in Live's `site-packages` folder,
+# included as development dependencies for the type checker.
+future==0.18.2
+raven==6.10.0

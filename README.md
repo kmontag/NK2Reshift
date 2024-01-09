@@ -1,0 +1,133 @@
+## NK2Reshift
+
+This is an Ableton Live control surface script for the [Korg
+nanoKONTROL2](https://www.korg.com/us/products/computergear/nanokontrol2/).
+
+It's a replica of dynamiiic's excellent
+[NanoKontrol2Shift](https://forum.ableton.com/viewtopic.php?t=193316).
+It uses more recent Live APIs to provide some usability benefits, for
+example:
+
+- more consistent LED behavior, for example when changing modes
+  or working with the clip matrix.
+- blinking LEDs to represent playing/triggered clips.
+- device identification, so the session ring ("red box") is only
+  visible when the nanoKONTROL2 is actually connected.
+
+This script supports Live 11. Earlier versions of Live are not supported.
+
+### Usage
+
+Usage is the same as NanoKontrol2Shfit:
+
+> It loads in a default or initial mode and there are 3 modes buttons:
+>
+> - STOP: Shift Mode
+> - PLAY: Alt Mode
+> - RECORD: Ctrl Mode
+>   Press one of them to enter that mode, pressing again will deactivate it and return to the initial mode. If you have one mode active and press other mode button, simply it deactivates the first and activates the second.
+>
+> OVERVIEW ON MODES:
+>
+> DEFAULT MODE:
+>
+> - Track Nav - Session left/right
+> - Rewind, Forward - Session up/down
+> - Marker Left, Right - Send up/down
+> - Cycle, Set Marker - Does nothing
+> - Faders - Session tracks volume
+> - Knobs - Session tracks send A (Assignable with marker left/right to the other sends)
+> - Solo, Arm, Mute - Session Clip Launch Matrix 8x3
+>
+> SHIFT MODE:
+>
+> - Track Nav - Same as in default mode
+> - Rewind, Forward - Same as in default mode
+> - Marker Left, Right - Same as in default mode
+> - Cycle, Set Marker - Does nothing
+> - Faders - Same as in default mode
+> - Knobs - Same as in default mode
+> - Solo, Arm, Mute - Solo, Arm and Mute for the Session controlled tracks
+>
+> ALT MODE:
+>
+> - Track Nav - Same as in default mode
+> - Rewind, Forward - Same as in default mode
+> - Marker Left, Right - Same as in default mode
+> - Cycle, Set Marker - Does nothing
+> - Faders - Same as in default mode
+> - Knobs - Same as in default mode
+> - Solo - Resets the value of the current send for the Session controlled tracks
+> - Mute - Select track for the Session controlled tracks
+> - Arm - Stop button for the Session controlled tracks
+>
+> CTRL MODE:
+>
+> - Track Nav - Same as in default mode
+> - Rewind, Forward - Same as in default mode
+> - Marker Left, Right - Device left/right
+> - Cycle - Device turn on/off
+> - Set Marker - Device lock/unlock
+> - Faders - Same as in default mode
+> - Knobs - Controls 8 knobs on a selected device
+> - Solo - Clip/Device view for the Session controlled tracks
+> - Mute - The 3 first Mute buttons are assigned to the 3 scene launch, the rest unassigned (Ideas are welcome)
+> - Arm 1 - Stop
+> - Arm 2 - Play
+> - Arm 3 - Record
+> - Arm 4 - Global Quantization
+> - Arm 5 - Tempo Down
+> - Arm 6 - Tempo Up
+> - Arm 7 - Metronome
+> - Arm 8 - Stop All Clips
+
+### Installation
+
+- Download or clone this repository and place it under `Remote
+Scripts` in your Live User Library. (If you don't know your User
+  Library location, you can find it under `Library` in Live's settings
+  dialog.)
+- Start or restart Live.
+- In the Live settings dialog under `Link/Tempo/MIDI`, choose
+  `NK2Reshift` as one of your control surfaces.
+- Make sure your nanoKONTROL2 device is plugged in, and select the
+  nanoKONTROL2 ports for the control surface input/output.
+- In the `MIDI Ports` section, make sure the nanoKONTROL2 input/output
+  have `Remote` checked, and all other boxes unchecked.
+
+### Configuration
+
+To configure the nanoKONTROL2 for use with this script, hold the `SET`
+and `STOP` buttons while plugging it in. This is the setup for Live
+integration recommended in the nanoKONTROL2 manual (so it also works
+with the built-in MackieControl control surface script).
+
+Note that this default configuration is **not** the same as the one
+expected by the original NanoKontrol2Shift. If you want to use the
+[NanoKontrol2Shift
+configuration](https://sonicbloom.net/free-midi-remote-script-apc-emulation-for-korg-nanokontrol-2/)
+instead, create a file called `configuration_local.py` in this
+directory, containing:
+
+```python
+# configuration_local.py
+from .configuration import NanoKontrol2ShiftConfiguration
+
+configuration = NanoKontrol2ShiftConfiguration()
+```
+
+Alternatively, you can provide a custom mapping by exporting any
+`configuration` from `configuration_local.py`, for example:
+
+```python
+# configuration_local.py
+from .configuration import cc_button, Configuration
+
+configuration = Configuration(
+    track_left_button=cc_button(50),
+    track_right_button=cc_button(51),
+    # ...
+)
+```
+
+See [configuration.py](configuration.py) for more details and the full list of settings.

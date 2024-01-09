@@ -1,0 +1,11 @@
+{
+  "executionEnvironments": [
+    {
+      "root": ".."
+    }
+  ],
+  "pythonVersion": "3.7",
+  "exclude": ["**/__pycache__", ".git", "__ext__/"],
+  "reportMissingModuleSource": false,
+  "extraPaths": ["./__ext__/System_MIDIRemoteScripts"]
+}

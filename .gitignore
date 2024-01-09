@@ -1,0 +1,7 @@
+/__pycache__/
+
+/__ext__/System_MIDIRemoteScripts/
+/.make.*
+
+# User config overrides.
+/configuration_local.py
