@@ -1,6 +1,6 @@
 ---
 name: validate
-on: [push, pull_request]
+on: push
 jobs:
   lint:
     runs-on: ubuntu-latest
