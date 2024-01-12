@@ -15,4 +15,6 @@ extend-select = ["ARG", "B", "E", "I", "W"]
 extend-ignore = ["E501"]
 
 [tool.ruff.lint.isort]
+# Explicitly specify Live as a standard library to avoid potential
+# inconsistencies across systems when sorting imports.
 extra-standard-library = ["Live"]
