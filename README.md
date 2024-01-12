@@ -92,8 +92,6 @@ Scripts` in your Live User Library. (If you don't know your User
   `NK2Reshift` as one of your control surfaces.
 - Make sure your nanoKONTROL2 device is plugged in, and select the
   nanoKONTROL2 ports for the control surface input/output.
-- In the `MIDI Ports` section, make sure the nanoKONTROL2 input/output
-  have `Remote` checked, and all other boxes unchecked.
 
 ### Configuration
 
