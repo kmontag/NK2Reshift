@@ -1,6 +1,6 @@
 import typing
 
-from ableton.v3.base import MultiSlot
+from ableton.v3.base import MultiSlot, listens
 from ableton.v3.control_surface.components import (
     ChannelStripComponent as ChannelStripComponentBase,
 )
@@ -26,12 +26,6 @@ class ChannelStripComponent(ChannelStripComponentBase):
         disabled_color="Mixer.NoTrack",
     )
 
-    # It doesn't seem possible to just add a `pressed_delayed` handler
-    # to the parent button - we need to explicitly redefine the button
-    # and the parent's `pressed` behavior in order to toggle folding
-    # on `pressed_delayed`.
-    track_select_button: typing.Any = ButtonControl(disabled_color="Mixer.NoTrack")
-
     def __init__(self, *a, **k):
         super().__init__(*a, **k)
         for view_name in ("Detail", "Detail/DeviceChain"):
@@ -50,6 +44,9 @@ class ChannelStripComponent(ChannelStripComponentBase):
         self.register_slot(
             self.song.view, self._update_clip_view_button, "selected_track"
         )
+
+        assert self.__on_track_select_button_is_held_value
+        self.__on_track_select_button_is_held_value.subject = self.track_select_button
 
     @clip_view_button.pressed
     def clip_view_button(self, _):  # type: ignore
@@ -73,14 +70,6 @@ class ChannelStripComponent(ChannelStripComponentBase):
         if send_index < len(sends):
             sends[send_index].value = 0
 
-    @track_select_button.pressed
-    def track_select_button(self, _):  # type: ignore
-        self._select_track()
-
-    @track_select_button.pressed_delayed
-    def track_select_button(self, _):
-        self._toggle_track_folded()
-
     def update(self):
         super().update()
         self._update_clip_view_button()
@@ -93,16 +82,6 @@ class ChannelStripComponent(ChannelStripComponentBase):
         devices = self._track.devices
         if devices is not None and len(devices) > 0:
             self.song.view.select_device(devices[0])
-
-    def _select_track(self):
-        # Copied from the base component's `track_select_button` handler.
-        assert self.song
-        assert self._track
-        if liveobj_changed(self.song.view.selected_track, self._track):
-            self.song.view.selected_track = self._track
-            self.notify(
-                self.notifications.Track.select, typing.cast(str, self._track.name)
-            )
 
     def _show_clip_view(self):
         self.application.view.show_view("Detail/Clip")
@@ -149,3 +128,8 @@ class ChannelStripComponent(ChannelStripComponentBase):
             and liveobj_valid(self._track)
             and len(self._track.clip_slots) > 0
         )
+
+    @listens("is_held")
+    def __on_track_select_button_is_held_value(self, is_held):
+        if is_held:
+            self._toggle_track_folded()
