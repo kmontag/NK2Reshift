@@ -6,14 +6,13 @@ from ableton.v3.base import depends, task
 from ableton.v3.control_surface import ElementsBase
 from ableton.v3.control_surface.elements import ButtonElement
 
-from .live import lazy_attribute
-
 from .colors import BlinkManager
 from .configuration import (
     ButtonConfiguration,
     Configuration,
     EncoderConfiguration,
 )
+from .live import lazy_attribute
 
 NUM_TRACKS = 8
 NUM_SCENES = 3
