@@ -13,11 +13,10 @@
 #       track_right_button=cc_button(51),
 #       # ...
 #   )
+import Live
 import typing
 
 from ableton.v3.control_surface import MIDI_CC_TYPE, MIDI_NOTE_TYPE, MIDI_PB_TYPE
-
-import Live
 
 DEFAULT_CHANNEL = 0
 MAP_MODES = Live.MidiMap.MapMode
