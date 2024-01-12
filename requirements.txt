@@ -6,10 +6,10 @@
 decompyle3~=3.9.0
 
 # Type checker.
-pyright~=1.1.345
+pyright==1.1.345
 
 # Formatter and linter.
-ruff~=0.1.9
+ruff==0.1.13
 
 ###
 # Packages that should be available in Live's `site-packages` folder,

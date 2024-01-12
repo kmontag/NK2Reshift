@@ -1,11 +1,10 @@
+import Live
 import typing
 
 from ableton.v3.control_surface.components import (
     TransportComponent as TransportComponentBase,
 )
 from ableton.v3.control_surface.controls import ButtonControl
-
-import Live
 
 TEMPO_MIN = 20.0
 TEMPO_MAX = 999.0

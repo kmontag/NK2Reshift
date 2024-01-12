@@ -13,3 +13,6 @@ extend-select = ["ARG", "B", "E", "I", "W"]
 # Turn off strict max line length; B950 allows for exceeding the max
 # line length in some cases.
 extend-ignore = ["E501"]
+
+[tool.ruff.lint.isort]
+extra-standard-library = ["Live"]
