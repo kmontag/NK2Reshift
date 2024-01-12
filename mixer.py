@@ -1,6 +1,7 @@
 import typing
 from itertools import zip_longest
 
+from ableton.v3.base import depends
 from ableton.v3.control_surface.components import MixerComponent as MixerComponentBase
 from ableton.v3.control_surface.controls import ButtonControl
 
@@ -15,10 +16,21 @@ class MixerComponent(MixerComponentBase):
         color="DefaultButton.Off", pressed_color="DefaultButton.On"
     )
 
-    def __init__(self, *a, channel_strip_component_type=ChannelStripComponent, **k):
+    @depends(show_message=None)
+    def __init__(
+        self,
+        *a,
+        channel_strip_component_type=ChannelStripComponent,
+        show_message: typing.Optional[typing.Callable[[str], typing.Any]] = None,
+        **k,
+    ):
         super().__init__(
             *a, channel_strip_component_type=channel_strip_component_type, **k
         )
+
+        assert show_message
+        self._show_message = show_message
+
         self._clip_view_buttons = None
         self._reset_send_buttons = None
 
@@ -53,3 +65,7 @@ class MixerComponent(MixerComponentBase):
             self._send_index_manager.send_index = (
                 self._send_index_manager.send_index + amount
             ) % self._send_index_manager.num_sends
+
+    def _on_send_index_changed(self):
+        self._show_message(f"Controlling Send {self.send_index+ 1}")
+        return super()._on_send_index_changed()
