@@ -17,12 +17,6 @@ from ableton.v3.control_surface.capabilities import (
     inport,
     outport,
 )
-from ableton.v3.control_surface.components import (
-    RecordingComponent,
-    SessionComponent,
-    SessionNavigationComponent,
-    SimpleDeviceNavigationComponent,
-)
 from ableton.v3.control_surface.legacy_bank_definitions import best_of_banks
 
 from .colors import Skin
@@ -77,11 +71,7 @@ class Specification(ControlSurfaceSpecification):
     num_scenes = NUM_SCENES
     create_mappings_function = create_mappings
     component_map = {
-        "DeviceNavigation": SimpleDeviceNavigationComponent,
         "Mixer": MixerComponent,
-        "Recording": RecordingComponent,
-        "Session": SessionComponent,
-        "SessionNavigation": SessionNavigationComponent,
         "Transport": TransportComponent,
     }
 
@@ -93,14 +83,6 @@ class Specification(ControlSurfaceSpecification):
 class NK2Reshift(ControlSurface):
     def __init__(self, *a, **k):
         super().__init__(*a, specification=Specification, **k)
-
-        # This doesn't seem to get set automatically - it looks like
-        # the ControlSurface should be setting it when a
-        # SessionComponent is present, but this isn't happening.
-        #
-        # This needs to be True to cause the session ring to appear
-        # when the device is identified.
-        self._can_enable_session_ring = True
 
     # Dependencies to be injected throughout the application.
     #

@@ -1,19 +1,26 @@
+import typing
+
+from ableton.v3.base import depends
 from ableton.v3.control_surface import ControlSurface
 from ableton.v3.control_surface.mode import CallFunctionMode
 
+from .configuration import Configuration
 from .elements import NUM_TRACKS
-from .modes import ModesComponent
 
 SHIFT_BUTTON = "stop_button"
 ALT_BUTTON = "play_button"
 CTRL_BUTTON = "record_button"
 
 
-def create_mappings(control_surface: ControlSurface):
+@depends(configuration=None)
+def create_mappings(
+    control_surface: ControlSurface, configuration: typing.Optional[Configuration]
+):
+    assert configuration
     mappings = {}
 
     # Session navigation is always active.
-    mappings["SessionNavigation"] = dict(
+    mappings["Session_Navigation"] = dict(
         up_button="rewind_button",
         down_button="fast_forward_button",
         left_button="track_left_button",
@@ -49,7 +56,7 @@ def create_mappings(control_surface: ControlSurface):
         return CallFunctionMode(on_enter_fn=on_enter)
 
     mappings["Modes"] = dict(
-        modes_component_type=ModesComponent,
+        initial=set_selected_mode_mode(configuration.initial_mode),
         # Use wrapper modes to get a different button color when DEFAULT is active.
         shift_from_default_button=SHIFT_BUTTON,
         alt_from_default_button=ALT_BUTTON,
@@ -112,7 +119,7 @@ def create_mappings(control_surface: ControlSurface):
                     device_on_off_button="cycle_button",
                 ),
                 dict(
-                    component="DeviceNavigation",
+                    component="Device_Navigation",
                     prev_button="marker_left_button",
                     next_button="marker_right_button",
                 ),
