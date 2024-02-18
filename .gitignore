@@ -3,5 +3,7 @@
 /__ext__/System_MIDIRemoteScripts/
 /.make.*
 
+/.venv/
+
 # User config overrides.
 /configuration_local.py

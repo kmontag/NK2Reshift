@@ -1,3 +1,16 @@
+[tool.pyright]
+pythonVersion = "3.7"
+
+exclude = ["**/__pycache__/", ".git/", ".venv/", "__ext__/"]
+extraPaths = ["./__ext__/System_MIDIRemoteScripts"]
+
+# Suppress warnings about the Live module not existing.
+reportMissingModuleSource = false
+
+# Set up the virtual environment.
+venvPath = "."
+venv = ".venv"
+
 [tool.ruff]
 target-version = "py37"
 # Exclude generated libs.
