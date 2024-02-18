@@ -19,10 +19,10 @@ fix: .make.pip-install
 
 __ext__/System_MIDIRemoteScripts/.make.decompile: $(SYSTEM_MIDI_REMOTE_SCRIPTS_DIR) | .make.pip-install
 	rm -rf $(@D)/
-	mkdir -p $(@D)/
+	mkdir -p $(@D)/ableton/
 # decompyle3 works for most files, and the ones where it throws errors
 # don't matter for our purposes.
-	decompyle3 -r -o $(@D) $(SYSTEM_MIDI_REMOTE_SCRIPTS_DIR)
+	decompyle3 -r -o $(@D)/ableton/ $(SYSTEM_MIDI_REMOTE_SCRIPTS_DIR)/ableton/
 	touch $@
 
 .make.pip-install: requirements.txt .python-version
