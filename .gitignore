@@ -6,4 +6,4 @@
 /.venv/
 
 # User config overrides.
-/configuration_local.py
+/user.py

@@ -104,21 +104,21 @@ Note that this default configuration is **not** the same as the one
 expected by the original NanoKontrol2Shift. If you want to use the
 [NanoKontrol2Shift
 configuration](https://sonicbloom.net/free-midi-remote-script-apc-emulation-for-korg-nanokontrol-2/)
-instead, create a file called `configuration_local.py` in this
+instead, create a file called `user.py` in this
 directory, containing:
 
 ```python
-# configuration_local.py
+# user.py
 from .configuration import NanoKontrol2ShiftConfiguration
 
 configuration = NanoKontrol2ShiftConfiguration()
 ```
 
 Alternatively, you can provide a custom mapping by exporting any
-`configuration` from `configuration_local.py`, for example:
+`configuration` from `user.py`, for example:
 
 ```python
-# configuration_local.py
+# user.py
 from .configuration import cc_button, Configuration
 
 configuration = Configuration(

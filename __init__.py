@@ -31,7 +31,7 @@ logger = logging.getLogger(__name__)
 # Load a local configuration if possible, or fall back to the default.
 _local_configuration: typing.Union[None, Configuration] = None
 try:
-    from .configuration_local import (  # type: ignore
+    from .user import (  # type: ignore
         configuration as _local_configuration,  # type: ignore
     )
 

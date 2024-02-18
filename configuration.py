@@ -2,10 +2,10 @@
 # application.
 #
 # To customize these settings, create a file called
-# `configuration_local.py` in this directory, and export a custom
+# `user.py` in this directory, and export a custom
 # `Configuration` instance named `configuration`, for example:
 #
-#   # configuration_local.py
+#   # user.py
 #   from .configuration import cc_button, Configuration
 #
 #   configuration = Configuration(
@@ -114,9 +114,9 @@ class Configuration(typing.NamedTuple):
 
 
 # To use the original NanoKontrol2Shift configuration, do something
-# like the following in `configuration_local.py`:
+# like the following in `user.py`:
 #
-#   # configuration_local.py
+#   # user.py
 #   from .configuration import NanoKontrol2ShiftConfiguration
 #
 #   configuration = NanoKontrol2ShiftConfiguration()
