@@ -17,6 +17,12 @@ fix: .make.pip-install
 	.venv/bin/ruff format .
 	.venv/bin/ruff check --fix .
 
+.PHONY: clean
+clean:
+	rm -rf .venv/
+	rm -rf __ext/System_MIDIRemoteScripts/
+	rm -f .make.*
+
 __ext__/System_MIDIRemoteScripts/.make.decompile: $(SYSTEM_MIDI_REMOTE_SCRIPTS_DIR) | .make.pip-install
 	rm -rf $(@D)/
 	mkdir -p $(@D)/ableton/
