@@ -50,7 +50,10 @@ class ChannelStripComponent(ChannelStripComponentBase):
 
     @clip_view_button.pressed
     def clip_view_button(self, _):  # type: ignore
-        self._select_track()
+        assert self.song
+        if liveobj_changed(self.song.view.selected_track, self._track):
+            self.song.view.selected_track = self._track
+
         self._show_clip_view()
         self._select_first_device()
 

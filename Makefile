@@ -1,4 +1,4 @@
-SYSTEM_MIDI_REMOTE_SCRIPTS_DIR := /Applications/Ableton\ Live\ 11\ Suite.app/Contents/App-Resources/MIDI\ Remote\ Scripts
+SYSTEM_MIDI_REMOTE_SCRIPTS_DIR := /Applications/Ableton\ Live\ 12\ Suite.app/Contents/App-Resources/MIDI\ Remote\ Scripts
 
 .PHONY: deps
 deps: __ext__/System_MIDIRemoteScripts/.make.decompile .make.pip-install
