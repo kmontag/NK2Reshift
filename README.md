@@ -83,10 +83,10 @@ Usage is the same as NanoKontrol2Shfit:
 
 ### Installation
 
-- Download or clone this repository and place it under `Remote
-Scripts` in your Live User Library. (If you don't know your User
-  Library location, you can find it under `Library` in Live's settings
-  dialog.)
+- Download or clone this repository and place it under
+  `Remote Scripts` in your Live User Library. If you download it
+  directly, change the folder name from `NK2Reshift-main` to
+  `NK2Reshift` (or anything without a hyphen).
 - Start or restart Live.
 - In the Live settings dialog under `Link/Tempo/MIDI`, choose
   `NK2Reshift` as one of your control surfaces.
