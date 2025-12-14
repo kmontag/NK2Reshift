@@ -5,6 +5,7 @@ description = "Ableton Live control surface script for the Korg nanoKONTROL2"
 authors = ["Kevin Montag"]
 readme = "README.md"
 packages = [{ include = "*", from = "." }]
+package-mode = false
 
 [tool.poetry.dependencies]
 # This is the version needed during development (to run pylingual).
