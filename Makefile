@@ -1,15 +1,39 @@
-SYSTEM_MIDI_REMOTE_SCRIPTS_DIR := /Applications/Ableton\ Live\ 12\ Suite.app/Contents/App-Resources/MIDI\ Remote\ Scripts
+# Auto-detect system MIDI Remote Scripts directory, or allow override.
+# Set to empty to skip decompilation: make SYSTEM_MIDI_REMOTE_SCRIPTS_DIR=
+ifeq ($(origin SYSTEM_MIDI_REMOTE_SCRIPTS_DIR),undefined)
+  ifeq ($(shell uname -s),Darwin)
+    # macOS: Find any Live 12 installation (Suite, Standard, or Intro).
+    SYSTEM_MIDI_REMOTE_SCRIPTS_DIR := $(shell find /Applications -maxdepth 1 -name "Ableton Live 12*.app" -print -quit 2>/dev/null | sed 's|$$|/Contents/App-Resources/MIDI Remote Scripts|')
+  else ifeq ($(OS),Windows_NT)
+    # Windows: Query registry for Ableton installation path.
+    ABLETON_PATH := $(shell powershell -Command "(Get-ItemProperty 'HKLM:\\SOFTWARE\\Ableton\\Live 12' -Name InstallLocation -ErrorAction SilentlyContinue).InstallLocation" 2>/dev/null)
+    ifneq ($(ABLETON_PATH),)
+      SYSTEM_MIDI_REMOTE_SCRIPTS_DIR := $(ABLETON_PATH)/Resources/MIDI Remote Scripts
+    endif
+  endif
+endif
 
 
 # Find all .pyc files in ableton/ and generate corresponding .py
 # target paths. Use shell to handle the path transformation to avoid
 # Make's space-splitting issues. Exclude default_bank_definitions.py -
 # pylingual doesn't seem to be able to handle it yet.
-ABLETON_PY_FILES := $(shell find $(SYSTEM_MIDI_REMOTE_SCRIPTS_DIR)/ableton -name "*.pyc" -type f 2>/dev/null | grep -v 'default_bank_definitions\.pyc' | sed 's|$(SYSTEM_MIDI_REMOTE_SCRIPTS_DIR)/\(.*\)\.pyc|__ext__/System_MIDIRemoteScripts/\1.py|')
+# If SYSTEM_MIDI_REMOTE_SCRIPTS_DIR is empty, this evaluates to empty list.
+ABLETON_PY_FILES := $(shell \
+	if [ -n "$(SYSTEM_MIDI_REMOTE_SCRIPTS_DIR)" ] && [ -d "$(SYSTEM_MIDI_REMOTE_SCRIPTS_DIR)" ]; then \
+		find "$(SYSTEM_MIDI_REMOTE_SCRIPTS_DIR)/ableton" -name "*.pyc" -type f 2>/dev/null | \
+		grep -v 'default_bank_definitions\.pyc' | \
+		sed 's|$(SYSTEM_MIDI_REMOTE_SCRIPTS_DIR)/\(.*\)\.pyc|__ext__/System_MIDIRemoteScripts/\1.py|'; \
+	fi)
 
 
 .PHONY: deps
 deps: $(ABLETON_PY_FILES) .make.poetry-install
+ifeq ($(ABLETON_PY_FILES),)
+	@echo "Note: Skipping Ableton library decompilation."
+	@echo "SYSTEM_MIDI_REMOTE_SCRIPTS_DIR is not set or directory not found."
+	@echo "Type checking will work without full Ableton API definitions."
+endif
 
 .PHONY: check
 check: .make.poetry-install $(ABLETON_PY_FILES)
@@ -74,6 +98,8 @@ __ext__/pylingual/venv/bin/pylingual: .gitmodules
 # take a lot of resources and we don't want to re-run e.g. every time
 # pyproject is touched. The `clean` target can be used to force
 # regeneration.
+# Only defined if SYSTEM_MIDI_REMOTE_SCRIPTS_DIR is set.
+ifneq ($(SYSTEM_MIDI_REMOTE_SCRIPTS_DIR),)
 __ext__/System_MIDIRemoteScripts/%.py: | __ext__/pylingual/venv/bin/pylingual .make.pyenv-install
 	@mkdir -p $(@D)
 	@echo "Decompiling: $*.pyc"
@@ -87,9 +113,10 @@ __ext__/System_MIDIRemoteScripts/%.py: | __ext__/pylingual/venv/bin/pylingual .m
 		./__ext__/pylingual/venv/bin/python ./__ext__/pylingual/venv/bin/pylingual \
 			-q \
 			-o $(@D) \
-			$(SYSTEM_MIDI_REMOTE_SCRIPTS_DIR)/$*.pyc
+			"$(SYSTEM_MIDI_REMOTE_SCRIPTS_DIR)/$*.pyc"
 	@mv "$(@D)/decompiled_$(@F)" "$@"
 	@echo "Finished decompiling: $*.pyc"
+endif
 
 .make.poetry-install: pyproject.toml poetry.lock
 	poetry install
