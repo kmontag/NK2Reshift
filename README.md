@@ -129,3 +129,15 @@ configuration = Configuration(
 ```
 
 See [configuration.py](configuration.py) for more details and the full list of settings.
+
+### Development
+
+[Poetry](https://python-poetry.org/) must be installed to use the dev
+tools.
+
+Install development dependencies with `make deps`. This sets up pyenv,
+and decompiles Python libraries from your local Live installation for
+type checking (this step is slow and memory-intensive).
+
+Run `make check` for type checking, `make lint` to check formatting,
+and `make fix` to auto-format code.
