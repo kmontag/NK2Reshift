@@ -85,7 +85,6 @@ __ext__/System_MIDIRemoteScripts/%.py: __ext__/pylingual/venv/bin/pylingual .mak
 			-o $(@D) \
 			$(SYSTEM_MIDI_REMOTE_SCRIPTS_DIR)/$*.pyc
 	@mv "$(@D)/decompiled_$(@F)" "$@"
-	@poetry run ruff format "$@"
 	@echo "Finished decompiling: $*.pyc"
 
 .make.poetry-install: pyproject.toml poetry.lock
