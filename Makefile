@@ -54,7 +54,7 @@ clean:
 	touch "$@"
 
 # Initialize and update the pylingual submodule, then set up its venv.
-__ext__/pylingual/venv/bin/pylingual: .gitmodules .make.pyenv-install
+__ext__/pylingual/venv/bin/pylingual: .gitmodules
 	git submodule update --init __ext__/pylingual
 # The poetry version might not be exactly in sync with pylingual's
 # lockfile, so we need to run `poetry lock` before installing.
@@ -69,8 +69,12 @@ __ext__/pylingual/venv/bin/pylingual: .gitmodules .make.pyenv-install
 		git checkout poetry.lock
 	touch "$@"
 
-# Pattern rule: decompile individual .pyc file to .py file.
-__ext__/System_MIDIRemoteScripts/%.py: __ext__/pylingual/venv/bin/pylingual .make.pyenv-install
+# Pattern rule: decompile individual .pyc file to .py file. The
+# dependency on pylingual is defined as order-only, since these builds
+# take a lot of resources and we don't want to re-run e.g. every time
+# pyproject is touched. The `clean` target can be used to force
+# regeneration.
+__ext__/System_MIDIRemoteScripts/%.py: | __ext__/pylingual/venv/bin/pylingual .make.pyenv-install
 	@mkdir -p $(@D)
 	@echo "Decompiling: $*.pyc"
 # Since we're somewhat likely to be in a directory with spaces
