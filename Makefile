@@ -20,15 +20,69 @@ fix: .make.poetry-install
 .PHONY: clean
 clean:
 	rm -rf .venv/
-	rm -rf __ext/System_MIDIRemoteScripts/
+	rm -rf __ext__/System_MIDIRemoteScripts/
+	rm -rf __ext__/pylingual/venv/
+	rm -rf __ext__/pyenv/versions/
 	rm -f .make.*
 
-__ext__/System_MIDIRemoteScripts/.make.decompile: $(SYSTEM_MIDI_REMOTE_SCRIPTS_DIR) | .make.poetry-install
-	rm -rf $(@D)/
-	mkdir -p $(@D)/ableton/
-# decompyle3 works for most files, and the ones where it throws errors
-# don't matter for our purposes.
-	poetry run decompyle3 -r -o $(@D)/ableton/ $(SYSTEM_MIDI_REMOTE_SCRIPTS_DIR)/ableton/
+# Initialize and update pyenv submodule, install Python 3.11.
+.make.pyenv-install: .gitmodules
+	@pwd_check=$$(pwd) && \
+	if echo "$$pwd_check" | grep -q ' '; then \
+		echo "ERROR: Physical directory path contains spaces: $$pwd_check"; \
+		echo "pyenv cannot build Python in directories with spaces."; \
+		echo ""; \
+		echo "Suggested workaround:"; \
+		echo "  1. Create a symlink without spaces:"; \
+		echo "     ln -s '$$pwd_check' ~/nk2reshift"; \
+		echo "  2. Run make from the symlink:"; \
+		echo "     cd ~/nk2reshift && make"; \
+		exit 1; \
+	fi
+	git submodule update --init __ext__/pyenv
+	export PYENV_ROOT="$$(pwd)/__ext__/pyenv" && \
+		export PATH="$$PYENV_ROOT/bin:$$PATH" && \
+		pyenv install -s 3.11
+	touch "$@"
+
+# Initialize and update the pylingual submodule, then set up its venv.
+__ext__/pylingual/venv/bin/pylingual: .gitmodules .make.pyenv-install
+	git submodule update --init __ext__/pylingual
+	cd __ext__/pylingual && \
+		python -m venv venv && \
+		. venv/bin/activate && \
+		pip install "poetry>=2.0" && \
+		poetry lock && \
+		poetry install
+	touch "$@"
+
+# Find all .pyc files in ableton/ and generate corresponding .py target paths.
+# Use shell to handle the path transformation to avoid Make's space-splitting issues.
+# Exclude default_bank_definitions.py - pylingual doesn't seem to be able to handle it yet.
+ABLETON_PY_FILES := $(shell find $(SYSTEM_MIDI_REMOTE_SCRIPTS_DIR)/ableton -name "*.pyc" -type f 2>/dev/null | grep -v 'default_bank_definitions\.pyc' | sed 's|$(SYSTEM_MIDI_REMOTE_SCRIPTS_DIR)/\(.*\)\.pyc|__ext__/System_MIDIRemoteScripts/\1.py|')
+
+# Pattern rule: decompile individual .pyc file to .py file.
+__ext__/System_MIDIRemoteScripts/%.py: __ext__/pylingual/venv/bin/pylingual .make.pyenv-install
+	@mkdir -p $(@D)
+	@echo "Decompiling: $*.pyc"
+# Since we're somewhat likely to be in a directory with spaces
+# somewhere in the path (e.g. "Remote Scripts"), the plyingual binary
+# from the venv might have a shebang with spaces, which doesn't work
+# very well. We instead run pylingual directly through the python
+# binary.
+	@export PYENV_ROOT="$$(pwd)/__ext__/pyenv" && \
+		export PATH="$$PYENV_ROOT/bin:$$PATH" && \
+		./__ext__/pylingual/venv/bin/python ./__ext__/pylingual/venv/bin/pylingual \
+			-q \
+			-o $(@D) \
+			$(SYSTEM_MIDI_REMOTE_SCRIPTS_DIR)/$*.pyc
+	@if [ -f "$(@D)/decompiled_$(@F)" ]; then \
+		mv "$(@D)/decompiled_$(@F)" "$@"; \
+	fi
+	@echo "Finished decompiling: $*.pyc"
+
+# Decompile all Ableton .pyc files using pylingual locally.
+__ext__/System_MIDIRemoteScripts/.make.decompile: $(ABLETON_PY_FILES)
 	touch "$@"
 
 .make.poetry-install: pyproject.toml poetry.lock

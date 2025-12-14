@@ -7,8 +7,9 @@ readme = "README.md"
 packages = [{ include = "*", from = "." }]
 
 [tool.poetry.dependencies]
-# Ableton python version as of v12.3.1.
-python = "^3.11.6"
+# This is the version needed during development (to run pylingual).
+# The Live python version is 3.11.6 as of v12.1.
+python = ">=3.12"
 
 [tool.poetry.group.dev.dependencies]
 decompyle3 = "~3.9.0"

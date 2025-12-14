@@ -189,5 +189,5 @@ dev = ["pre-commit", "pytest", "tox"]
 
 [metadata]
 lock-version = "2.1"
-python-versions = "^3.11.6"
-content-hash = "1ecaf3d40977b76085ce1261db331104286b9210a9e1dd6444e94fe133e1b098"
+python-versions = ">=3.12"
+content-hash = "248c61153d2a53ba58532f1e3f59e6b252a4dcd1ceca51f88c419b34f68869f4"

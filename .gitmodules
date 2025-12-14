@@ -1,0 +1,6 @@
+[submodule "__ext__/pylingual"]
+	path = __ext__/pylingual
+	url = https://github.com/syssec-utd/pylingual
+[submodule "__ext__/pyenv"]
+	path = __ext__/pyenv
+	url = https://github.com/pyenv/pyenv
