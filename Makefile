@@ -1,10 +1,18 @@
 SYSTEM_MIDI_REMOTE_SCRIPTS_DIR := /Applications/Ableton\ Live\ 12\ Suite.app/Contents/App-Resources/MIDI\ Remote\ Scripts
 
+
+# Find all .pyc files in ableton/ and generate corresponding .py
+# target paths. Use shell to handle the path transformation to avoid
+# Make's space-splitting issues. Exclude default_bank_definitions.py -
+# pylingual doesn't seem to be able to handle it yet.
+ABLETON_PY_FILES := $(shell find $(SYSTEM_MIDI_REMOTE_SCRIPTS_DIR)/ableton -name "*.pyc" -type f 2>/dev/null | grep -v 'default_bank_definitions\.pyc' | sed 's|$(SYSTEM_MIDI_REMOTE_SCRIPTS_DIR)/\(.*\)\.pyc|__ext__/System_MIDIRemoteScripts/\1.py|')
+
+
 .PHONY: deps
-deps: __ext__/System_MIDIRemoteScripts/.make.decompile .make.poetry-install
+deps: $(ABLETON_PY_FILES) .make.poetry-install
 
 .PHONY: check
-check: .make.poetry-install __ext__/System_MIDIRemoteScripts/.make.decompile
+check: .make.poetry-install $(ABLETON_PY_FILES)
 	poetry run pyright .
 
 .PHONY: lint
@@ -61,11 +69,6 @@ __ext__/pylingual/venv/bin/pylingual: .gitmodules .make.pyenv-install
 		git checkout poetry.lock
 	touch "$@"
 
-# Find all .pyc files in ableton/ and generate corresponding .py target paths.
-# Use shell to handle the path transformation to avoid Make's space-splitting issues.
-# Exclude default_bank_definitions.py - pylingual doesn't seem to be able to handle it yet.
-ABLETON_PY_FILES := $(shell find $(SYSTEM_MIDI_REMOTE_SCRIPTS_DIR)/ableton -name "*.pyc" -type f 2>/dev/null | grep -v 'default_bank_definitions\.pyc' | sed 's|$(SYSTEM_MIDI_REMOTE_SCRIPTS_DIR)/\(.*\)\.pyc|__ext__/System_MIDIRemoteScripts/\1.py|')
-
 # Pattern rule: decompile individual .pyc file to .py file.
 __ext__/System_MIDIRemoteScripts/%.py: __ext__/pylingual/venv/bin/pylingual .make.pyenv-install
 	@mkdir -p $(@D)
@@ -83,10 +86,6 @@ __ext__/System_MIDIRemoteScripts/%.py: __ext__/pylingual/venv/bin/pylingual .mak
 			$(SYSTEM_MIDI_REMOTE_SCRIPTS_DIR)/$*.pyc
 	@mv "$(@D)/decompiled_$(@F)" "$@"
 	@echo "Finished decompiling: $*.pyc"
-
-# Decompile all Ableton .pyc files using pylingual locally.
-__ext__/System_MIDIRemoteScripts/.make.decompile: $(ABLETON_PY_FILES)
-	touch "$@"
 
 .make.poetry-install: pyproject.toml poetry.lock
 	poetry install
