@@ -16,7 +16,10 @@ python = ">=3.12"
 decompyle3 = "~3.9.0"
 pyright = "1.1.345"
 ruff = "0.1.13"
-future = "0.18.2"
+
+# Packages available at runtime in Live.
+decorator = "5.1.0"
+future = "0.18.3"
 raven = "6.10.0"
 
 [build-system]
