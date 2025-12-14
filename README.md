@@ -129,3 +129,15 @@ configuration = Configuration(
 ```
 
 See [configuration.py](configuration.py) for more details and the full list of settings.
+
+### Development
+
+[Poetry](https://python-poetry.org/) must be installed to use the dev
+tools.
+
+Install development dependencies with `make deps`. This sets up Poetry
+and (if Ableton Live 12 is detected) decompiles Ableton's Python
+libraries for type checking.
+
+Run `make check` for type checking, `make lint` to check formatting,
+and `make fix` to auto-format code.

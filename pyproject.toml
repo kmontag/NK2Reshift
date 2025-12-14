@@ -1,5 +1,30 @@
+[tool.poetry]
+name = "nk2reshift"
+version = "0.0.0-dev"
+description = "Ableton Live control surface script for the Korg nanoKONTROL2"
+authors = ["Kevin Montag"]
+readme = "README.md"
+packages = [{ include = "*", from = "." }]
+package-mode = false
+
+[tool.poetry.dependencies]
+# This is the version needed during development (to run pylingual).
+# The Live python version is 3.11.6 as of v12.1.
+python = ">=3.12"
+
+[tool.poetry.group.dev.dependencies]
+decompyle3 = "~3.9.0"
+pyright = "1.1.345"
+ruff = "0.1.13"
+future = "0.18.2"
+raven = "6.10.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
 [tool.pyright]
-pythonVersion = "3.7"
+pythonVersion = "3.11"
 
 exclude = ["**/__pycache__/", ".git/", ".venv/", "__ext__/"]
 extraPaths = ["./__ext__/System_MIDIRemoteScripts"]
@@ -12,7 +37,7 @@ venvPath = "."
 venv = ".venv"
 
 [tool.ruff]
-target-version = "py37"
+target-version = "py311"
 # Exclude generated libs.
 extend-exclude = ["__ext__"]
 
