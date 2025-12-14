@@ -48,12 +48,17 @@ clean:
 # Initialize and update the pylingual submodule, then set up its venv.
 __ext__/pylingual/venv/bin/pylingual: .gitmodules .make.pyenv-install
 	git submodule update --init __ext__/pylingual
+# The poetry version might not be exactly in sync with pylingual's
+# lockfile, so we need to run `poetry lock` before installing.
+# However, this modifies the lockfile, so we also reset it after the
+# install to avoid messy git diffs.
 	cd __ext__/pylingual && \
 		python -m venv venv && \
 		. venv/bin/activate && \
 		pip install "poetry>=2.0" && \
 		poetry lock && \
-		poetry install
+		poetry install && \
+		git checkout poetry.lock
 	touch "$@"
 
 # Find all .pyc files in ableton/ and generate corresponding .py target paths.
@@ -70,15 +75,13 @@ __ext__/System_MIDIRemoteScripts/%.py: __ext__/pylingual/venv/bin/pylingual .mak
 # from the venv might have a shebang with spaces, which doesn't work
 # very well. We instead run pylingual directly through the python
 # binary.
-	@export PYENV_ROOT="$$(pwd)/__ext__/pyenv" && \
-		export PATH="$$PYENV_ROOT/bin:$$PATH" && \
+	@PYENV_ROOT="$$(pwd)/__ext__/pyenv" \
+		PATH="$$PYENV_ROOT/bin:$$PATH" \
 		./__ext__/pylingual/venv/bin/python ./__ext__/pylingual/venv/bin/pylingual \
 			-q \
 			-o $(@D) \
 			$(SYSTEM_MIDI_REMOTE_SCRIPTS_DIR)/$*.pyc
-	@if [ -f "$(@D)/decompiled_$(@F)" ]; then \
-		mv "$(@D)/decompiled_$(@F)" "$@"; \
-	fi
+	@mv "$(@D)/decompiled_$(@F)" "$@"
 	@echo "Finished decompiling: $*.pyc"
 
 # Decompile all Ableton .pyc files using pylingual locally.
