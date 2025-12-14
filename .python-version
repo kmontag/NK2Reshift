@@ -1,6 +1,0 @@
-3.7.16
-
-# This is the python version that should be used when running dev
-# commands. Live's built-in python version (as of v11.3.13) is 3.7.3,
-# but that version doesn't have readily-available builds for e.g. M1
-# machines.
