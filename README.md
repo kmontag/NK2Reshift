@@ -14,7 +14,12 @@ example:
 - device identification, so the session ring ("red box") is only
   visible when the nanoKONTROL2 is actually connected.
 
-This script supports Live 11 and 12. Earlier versions of Live are not supported.
+This script supports Live 12.3 and up. Many features will probably
+work in earlier versions of Live, but YMMV. Note that this script uses
+recent Live APIs which are subject to change - things should generally
+be pretty stable in practice, but please [file an issue](../../issues)
+(in this repository, not with Ableton) if you see any breakage on
+newer Live versions.
 
 ### Usage
 
