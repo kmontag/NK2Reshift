@@ -19,10 +19,12 @@ example:
 This script supports Live 12.3 and up. Many features will probably
 work in earlier versions of Live, but YMMV.
 
-Note that this script uses recent APIs which are subject to change in
+This is an unofficial script. Any issues should be
+[reported](../../issues) to this repository, not to Ableton.
+
+Note that NK2Reshift uses recent APIs which are subject to change in
 future Live versions. Things should be pretty stable in practice, but
-please [file an issue](../../issues) (in this repository, not with
-Ableton) if you see any breakage after updating Live.
+please file an issue if you see any breakage after updating Live.
 
 ### Usage
 
