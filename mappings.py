@@ -40,8 +40,8 @@ def create_mappings(
         return dict(
             component="Mixer",
             send_controls="knobs",
-            next_send_button="marker_right_button",
-            prev_send_button="marker_left_button",
+            next_send_index_button="marker_right_button",
+            prev_send_index_button="marker_left_button",
         )
 
     # A mode that just selects another mode. We use this to get a
