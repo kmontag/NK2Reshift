@@ -29,6 +29,7 @@ class MixerComponent(MixerComponentBase):
     def set_clip_view_buttons(self, buttons):
         self._clip_view_buttons = buttons
         for strip, button in zip_longest(self._channel_strips, buttons or []):
+            assert isinstance(strip, ChannelStripComponent)
             strip.clip_view_button.set_control_element(button)
             strip.update()
 
