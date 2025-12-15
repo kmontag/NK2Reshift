@@ -14,6 +14,8 @@ example:
 - device identification, so the session ring ("red box") is only
   visible when the nanoKONTROL2 is actually connected.
 
+### Status
+
 This script supports Live 12.3 and up. Many features will probably
 work in earlier versions of Live, but YMMV.
 
