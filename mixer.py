@@ -3,7 +3,6 @@ from itertools import zip_longest
 
 from ableton.v3.base import depends
 from ableton.v3.control_surface.components import MixerComponent as MixerComponentBase
-from ableton.v3.control_surface.controls import ButtonControl
 
 from .channel_strip import ChannelStripComponent
 
