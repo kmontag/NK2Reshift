@@ -25,6 +25,7 @@ them](../../issues) in this repository, not with Ableton.
 Note that NK2Reshift uses recent APIs which are subject to change in
 future Live versions. Things should be pretty stable in practice, but
 please file an issue here if you see any breakage after updating Live.
+I'll do my best to keep the script up-to-date with upstream changes.
 
 ### Usage
 
