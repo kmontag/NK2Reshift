@@ -4,6 +4,9 @@ from ableton.v3.base import MultiSlot, listens
 from ableton.v3.control_surface.components import (
     ChannelStripComponent as ChannelStripComponentBase,
 )
+from ableton.v3.control_surface.components import (
+    MixerComponent as MixerComponentBase,
+)
 from ableton.v3.control_surface.controls import ButtonControl
 from ableton.v3.live import liveobj_changed, liveobj_valid
 
@@ -63,9 +66,11 @@ class ChannelStripComponent(ChannelStripComponentBase):
 
     @reset_send_button.pressed
     def reset_send_button(self, _):
-        # The parent is a MixerComponent.
-        assert self.parent
-        send_index = self.parent.send_index or 0
+        # Help out the type checker. In practice this should actually
+        # be our own custom MixerComponent, but it doesn't really
+        # matter.
+        assert isinstance(self.parent, MixerComponentBase)
+        send_index = self.parent._send_index_control.send_index or 0
 
         assert self._track
         sends = self._track.mixer_device.sends

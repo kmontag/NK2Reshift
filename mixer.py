@@ -36,6 +36,7 @@ class MixerComponent(MixerComponentBase):
     def set_reset_send_buttons(self, buttons):
         self._reset_send_buttons = buttons
         for strip, button in zip_longest(self._channel_strips, buttons or []):
+            assert isinstance(strip, ChannelStripComponent)
             strip.reset_send_button.set_control_element(button)
             strip.update()
 
