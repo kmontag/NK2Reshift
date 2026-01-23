@@ -27,7 +27,7 @@ resource "github_repository" "default" {
   name       = var.github_repository_name
   visibility = "public"
 
-  description = "Ableton Live 12 control surface for the SoftStep 2"
+  description = "Ableton Live 12 control surface for the Korg nanoKONTROL 2"
 
   vulnerability_alerts = true
 
